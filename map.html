@@ -1,0 +1,77 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/leaflet.css"
+  integrity="sha512-mD70nAW2ThLsWH0zif8JPbfraZ8hbCtjQ+5RU1m4+ztZq6/MymyZeB55pWsi4YAX+73yvcaJyk61mzfYMvtm9w=="
+  crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+<script src="https://ppete2.github.io/Leaflet.PolylineMeasure/Leaflet.PolylineMeasure.js"></script>
+
+<style>
+  html,
+  body,
+  .full,
+  #map {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+</style>
+<div class="row full">
+  <div id="map" class="col col-sm-9 full"></div>
+</div>
+
+<script>
+  var map = L.map('map').setView([40.8706304, -73.8958747], 16);
+  var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+
+  var buffers = [];
+  function addMarker(code, lat, lng, broken) {
+    const title = code + (broken ? " (broken)" : "");
+    var p = L.marker([lat, lng]);
+    p.title = title;
+    p.alt = title;
+    p.bindPopup(code);
+    p.addTo(map);
+    // https://stackoverflow.com/questions/23567203/leaflet-changing-marker-color#comment131844224_61982880
+    if (broken) p._icon.style.filter = "hue-rotate(120deg)";
+    var c = L.circle([lat, lng], {
+      color: broken ? 'red' : 'green',
+      fillColor: '#f03',
+      fillOpacity: 0.5,
+      radius: 0
+    }).addTo(map);
+    buffers.push(c);
+    return p;
+  }
+
+  function addMarkers(points) {
+    const markers = [];
+    for (var i = 0; i < points.length; i++) {
+      const { name, lat, lng, working } = points[i];
+      markers.push(addMarker(name, lat, lng, !working));
+    }
+    const group = new L.featureGroup(markers);
+    map.fitBounds(group.getBounds());
+  }
+
+  window.addEventListener("message", (event) => {
+    console.log('GOT MESSAGE', event.data)
+    if (event.data && event.data.type == "showPoints") {
+      addMarkers(event.data.data)
+    }
+  });
+
+  L.control.scale({ maxWidth: 240, metric: true, position: 'bottomleft' }).addTo(map);
+  L.control.polylineMeasure({ position: 'topleft', imperial: false, clearMeasurementsOnStop: false, showMeasurementsClearControl: true }).addTo(map);
+
+  $("#range").change(function (e) {
+    var radius = parseInt($(this).val())
+    buffers.forEach(function (e) {
+      e.setRadius(radius);
+      e.addTo(map);
+    });
+  });
+
+</script>

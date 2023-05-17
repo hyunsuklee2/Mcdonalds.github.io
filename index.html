@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock for Ice Cream</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+
+    body {}
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100vw;
+      font-family: sans-serif;
+    }
+
+    .main {
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .hp {
+      display: block;
+      height: fit-content;
+      text-align: center;
+    }
+
+    .input {
+      margin-top: 20px;
+      height: 30px;
+      text-align: center;
+      font-size: x-large;
+      border-radius: 20px;
+    }
+
+    .canvas-holder {
+      position: fixed;
+      height: 100vh;
+      width: 100vw;
+      background-color: pink;
+      z-index: -1;
+      padding: 0;
+      margin: 0;
+    }
+
+    .suggestions {
+      position: absolute;
+    }
+
+    .suggestion {
+      display: block;
+      background-color: white;
+      height: fit-content;
+      width: 250px;
+      padding: 4%;
+      margin: 2%;
+      border-radius: 20px;
+      /* margin: auto; */
+    }
+
+    .suggestion:hover {
+      filter: invert();
+      cursor: pointer;
+    }
+
+    .reload {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas class="canvas-holder"></canvas>
+  <div class="container">
+    <div class="hp">
+      <div class='reload' style='position:fixed; left:2%;top:2%;' onclick="location.reload()">🔄</div>
+      <div class='reload' style='position:fixed; right:2%;top:2%;' onclick="showMap()">🗺️</div>
+      <div class="main">In Stock?</div>
+      <div class="searchbar">
+        <input id="query" class='input' type="text" oninput="onMainInput(event)" />
+      </div>
+      <div class="suggestions">
+        <!-- <div class="suggestion">
+          <div>Vanilla Cone</div>
+        </div> -->
+      </div>
+
+      <div id="thing" style="margin-top:2%;">
+        <style>
+          .cards {
+            display: flex;
+            /* width: inherit; */
+            flex-flow: row wrap;
+            justify-content: center;
+            align-items: center;
+            margin-top: 200px;
+          }
+
+          .card {
+            text-align: center;
+            line-height: 1.0;
+
+            width: 250px;
+            height: 200px;
+            border-radius: 20px;
+            margin: 10px;
+          }
+
+          .item {
+            /* filter: brightness(1); */
+            color: white;
+          }
+
+          .card:hover {
+            filter: brightness(0.5);
+            cursor: pointer;
+          }
+
+          a {
+            color: gold;
+            text-decoration: none;
+          }
+
+          a:hover {
+            color: pink;
+          }
+        </style>
+        <div class="cards">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="spin.js?5"></script>
+  <script src="suggestion.js?12"></script>
+  <script src="query.js?20"></script>
+</body>
+
+</html>
